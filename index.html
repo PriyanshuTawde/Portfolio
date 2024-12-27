@@ -156,9 +156,44 @@
                                             <p class="mb-0"><strong class="fw-bold text-dark">Freelancer :</strong> Available</p>
                                         </div>
                                     </div>
-                                    <a href="https://portfolio-backend-rbul.onrender.com" class="btn btn-primary">
+                                    <button id="downloadCvBtn" class="btn btn-primary">
                                         <i class="fas fa-download"></i> Download My CV
-                                      </a>                                      
+                                      </button>
+                                      
+                                      <script>
+                                        document.getElementById('downloadCvBtn').addEventListener('click', function() {
+                                          // 1) Fetch the PDF from your backend
+                                          fetch('https://portfolio-backend-rbul.onrender.com/download-cv')
+                                            .then(response => {
+                                              if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                              }
+                                              return response.blob(); // convert the response to a Blob
+                                            })
+                                            .then(blob => {
+                                              // 2) Create a temporary blob URL
+                                              const url = window.URL.createObjectURL(blob);
+                                      
+                                              // 3) Create a hidden <a> tag, set download info
+                                              const a = document.createElement('a');
+                                              a.style.display = 'none';
+                                              a.href = url;
+                                              a.download = 'Priyanshu-Resume.pdf'; // The file name
+                                      
+                                              // 4) Append to body, click it, remove it
+                                              document.body.appendChild(a);
+                                              a.click();
+                                              document.body.removeChild(a);
+                                      
+                                              // 5) Revoke the temporary URL
+                                              window.URL.revokeObjectURL(url);
+                                            })
+                                            .catch(error => {
+                                              console.error('Error downloading CV:', error);
+                                              alert('Failed to download CV. Please try again later.');
+                                            });
+                                        });
+                                      </script>                                   
                                 </div>
                             </div>
                         </div>
